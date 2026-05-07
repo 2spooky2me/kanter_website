@@ -1,94 +1,54 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import HeaderV2 from "../NavBar/HeaderV2";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { FiCheckCircle } from 'react-icons/fi';
+import HeaderV2 from '../NavBar/HeaderV2';
+import FadeInOnScroll from '../common/FadeInOnScroll';
+import Footer from '../Footer';
+import { getLanguageMeta, getTranslations } from '../../i18n/translations';
 
 const AboutUs = () => {
-    const currentLanguage = useSelector((state) => state.furniture.currentLanguage || "en");
-
-    const content = {
-        en: {
-            header: "About Kanter",
-            text: `
-                Welcome to "Kanter" – the leading furniture factory in Rishon Lezion since 1992. 
-                For over 30 years, we at Kanter have specialized in designing and manufacturing 
-                luxury living rooms that combine uncompromising quality, comfort, and meticulous design.
-
-                At Kanter, our vision is to create living rooms that are not just furniture but 
-                an integral part of your home. Every piece we craft is made with attention to 
-                the smallest details, from selecting the highest-quality materials to achieving 
-                the perfect finish, ensuring it exudes luxury and comfort for years to come.
-
-                Our factory, located in the heart of Rishon Lezion, proudly offers personalized 
-                solutions for every client, emphasizing unique needs and personal style. Our team 
-                of designers and craftsmen combines the tradition of fine furniture-making with 
-                modern technology to create the perfect living room for you.
-
-                At Kanter, your home transforms into a beautifully designed dream. We would be 
-                delighted to host you at our factory and work together to create the living room 
-                you’ve always dreamed of.
-            `,
-        },
-        he: {
-            header: "אודות קנטר",
-            text: `
-                ברוכים הבאים ל"קנטר" – מפעל הרהיטים המוביל בראשון לציון מאז 1992. כבר 
-                יותר מ-30 שנה, אנו בקנטר מתמחים בעיצוב וייצור סלונים יוקרתיים המשלבים 
-                איכות בלתי מתפשרת, נוחות ועיצוב מוקפד.
-
-                החזון שלנו בקנטר הוא ליצור סלונים שהם לא רק רהיטים, אלא חלק בלתי נפרד 
-                מהבית שלכם. כל פריט שאנו מייצרים נבנה מתוך מחשבה על פרטים קטנים, החל 
-                מבחירת החומרים האיכותיים ביותר ועד לגימור המושלם, כדי להבטיח שהוא ישדר 
-                יוקרה ונוחות לאורך שנים.
-
-                המפעל שלנו, הממוקם בלב ראשון לציון, גאה להציע פתרונות בהתאמה אישית לכל 
-                לקוח, תוך שימת דגש על צרכים ייחודיים וסגנון אישי. צוות המעצבים 
-                והאומנים שלנו משלב מסורת של אומנות רהיטים עם טכנולוגיה מודרנית כדי 
-                ליצור את הסלון המושלם עבורכם.
-
-                בקנטר, הבית שלכם הופך לחלום מעוצב. נשמח לארח אתכם במפעל שלנו וליצור יחד 
-                את הסלון שתמיד חלמתם עליו.
-            `,
-        },
-        ru: {
-            header: "О Кантере",
-            text: `
-                Добро пожаловать в "Кантер" – ведущую фабрику мебели в Ришон-ле-Ционе с 1992 года. 
-                Более 30 лет мы в "Кантер" специализируемся на проектировании и производстве 
-                роскошных гостиных, которые сочетают непревзойденное качество, комфорт и тщательный дизайн.
-
-                Наша цель в "Кантер" – создавать гостиные, которые являются не просто мебелью, 
-                но и неотъемлемой частью вашего дома. Каждое изделие изготавливается с вниманием 
-                к мельчайшим деталям: от выбора высококачественных материалов до идеальной отделки, 
-                обеспечивающей роскошь и комфорт на долгие годы.
-
-                Наша фабрика, расположенная в самом сердце Ришон-ле-Циона, с гордостью предлагает 
-                индивидуальные решения для каждого клиента, подчеркивая уникальные потребности и 
-                персональный стиль. Наша команда дизайнеров и мастеров объединяет традиции 
-                высокого мебельного искусства с современными технологиями для создания 
-                идеальной гостиной для вас.
-
-                В "Кантер" ваш дом превращается в красиво оформленную мечту. Мы будем рады 
-                пригласить вас на нашу фабрику и вместе создать гостиную вашей мечты.
-            `,
-        },
-    };
-
-    const { header, text } = content[currentLanguage];
+    const currentLanguage = useSelector((state) => state.furniture.currentLanguage);
+    const t = getTranslations(currentLanguage);
+    const { dir } = getLanguageMeta(currentLanguage);
 
     return (
-        <>
+        <div className="min-h-screen bg-[#fff8ec] text-[#151312]" dir={dir}>
             <HeaderV2 />
-            <section className="bg-gray-100 py-16">
-                <div className="max-w-5xl mx-auto px-6 text-center">
-                    <h2 className="text-4xl font-extrabold text-gray-800 mb-6">
-                        {header}
-                    </h2>
-                    <div className="bg-white shadow-lg rounded-lg p-8 text-gray-700 text-lg leading-relaxed">
-                        <p className="whitespace-pre-line">{text}</p>
+            <main>
+                <section className="bg-white py-16 md:py-24">
+                    <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 md:grid-cols-[0.9fr_1.1fr] md:px-8">
+                        <FadeInOnScroll>
+                            <span className="text-sm font-black text-[#7c3aed]">{t.aboutPage.eyebrow}</span>
+                            <h1 className="mt-4 text-4xl font-black leading-tight md:text-6xl">
+                                {t.aboutPage.title}
+                            </h1>
+                        </FadeInOnScroll>
+                        <FadeInOnScroll className="space-y-5 text-lg leading-9 text-stone-600" delay={120}>
+                            {t.aboutPage.paragraphs.map((paragraph) => (
+                                <p key={paragraph}>{paragraph}</p>
+                            ))}
+                        </FadeInOnScroll>
                     </div>
-                </div>
-            </section>
-        </>
+                </section>
+
+                <section className="py-16 md:py-24">
+                    <div className="mx-auto max-w-7xl px-5 md:px-8">
+                        <div className="grid gap-6 md:grid-cols-3">
+                            {t.aboutPage.values.map(([title, text], index) => (
+                                <FadeInOnScroll key={title} delay={index * 120}>
+                                    <article className="h-full rounded-[8px] border border-[#eadcc4] bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+                                        <FiCheckCircle className="text-3xl text-[#7c3aed]" />
+                                        <h2 className="mt-5 text-2xl font-black">{title}</h2>
+                                        <p className="mt-4 leading-8 text-stone-600">{text}</p>
+                                    </article>
+                                </FadeInOnScroll>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <Footer />
+        </div>
     );
 };
 

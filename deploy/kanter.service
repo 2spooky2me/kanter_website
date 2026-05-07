@@ -1,0 +1,19 @@
+[Unit]
+Description=Kanter website Node server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/kanter_website
+ExecStart=/usr/bin/node server/server.js
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+Environment=API_HOST=127.0.0.1
+Environment=API_PORT=4000
+Environment=ADMIN_USER=admin
+Environment=ADMIN_PASSWORD=change-this-password-before-first-run
+Environment=ADMIN_TOKEN_SECRET=change-this-to-a-long-random-secret
+
+[Install]
+WantedBy=multi-user.target

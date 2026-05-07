@@ -1,92 +1,77 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { IoIosCloseCircle } from "react-icons/io";
-import HeaderV2 from "../NavBar/HeaderV2";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { IoIosCloseCircle } from 'react-icons/io';
+import HeaderV2 from '../NavBar/HeaderV2';
+import GalleryGrid from '../Gallery/GalleryGrid';
+import FadeInOnScroll from '../common/FadeInOnScroll';
+import Footer from '../Footer';
+import { getLanguageMeta, getTranslations } from '../../i18n/translations';
+import { getLocalizedSofa } from '../../utils/localization';
 
 const ImageGallery = () => {
-    const furnitureItems = useSelector((state) => state.furniture.items || []);
-    const currentLanguage = useSelector((state) => state.furniture.currentLanguage || "en");
+    const sofas = useSelector((state) => state.furniture.items || []);
+    const currentLanguage = useSelector((state) => state.furniture.currentLanguage);
     const [selectedItem, setSelectedItem] = useState(null);
-
-    const openModal = (item) => {
-        setSelectedItem(item);
-    };
-
-    const closeModal = () => {
-        setSelectedItem(null);
-    };
-
-    const titles = {
-        en: "Collection",
-        he: "קולקציה",
-        ru: "Коллекция",
-    };
+    const t = getTranslations(currentLanguage);
+    const { dir } = getLanguageMeta(currentLanguage);
+    const localizedSelectedItem = selectedItem
+        ? getLocalizedSofa(selectedItem, currentLanguage)
+        : null;
 
     return (
-        <>
+        <div className="min-h-screen bg-[#fff8ec] text-[#151312]" dir={dir}>
             <HeaderV2 />
-            <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-12">
-                <h1 className="text-4xl font-bold text-gray-800 mb-8">
-                    {titles[currentLanguage]}
-                </h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 px-4">
-                    {furnitureItems.map((item, index) => (
-                        <div
-                            key={index}
-                            className="group relative overflow-hidden rounded-lg shadow-lg cursor-pointer"
-                            onClick={() => openModal(item)}
-                        >
-                            <img
-                                src={item.image}
-                                alt={item.name[currentLanguage]}
-                                className="w-full h-70 object-cover transform transition-transform duration-500 group-hover:scale-110"
-                            />
-                            <div
-                                className="absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-500 group-hover:opacity-100 flex items-center justify-center"
-                            >
-                                <p className="text-white text-lg font-semibold">
-                                    {item.name[currentLanguage]}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+            <main>
+                <section className="bg-white py-16 md:py-24">
+                    <FadeInOnScroll className="mx-auto max-w-7xl px-5 text-center md:px-8">
+                        <span className="text-sm font-black text-[#7c3aed]">{t.gallery.pageEyebrow}</span>
+                        <h1 className="mt-4 text-4xl font-black md:text-6xl">{t.gallery.pageTitle}</h1>
+                        <p className="mx-auto mt-5 max-w-2xl text-lg leading-9 text-stone-600">
+                            {t.gallery.pageDescription}
+                        </p>
+                    </FadeInOnScroll>
+                </section>
 
-            {selectedItem && (
+                <section className="py-12 md:py-20">
+                    <div className="mx-auto max-w-7xl px-5 md:px-8">
+                        <GalleryGrid sofas={sofas} onSelect={setSelectedItem} />
+                    </div>
+                </section>
+            </main>
+
+            {localizedSelectedItem && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
-                    onClick={closeModal}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"
+                    onClick={() => setSelectedItem(null)}
                 >
                     <div
-                        className="bg-white w-full max-w-[38%] h-auto overflow-hidden relative rounded-lg"
-                        onClick={(e) => e.stopPropagation()}
+                        className="relative max-h-[92vh] w-full max-w-4xl overflow-auto rounded-[8px] bg-white shadow-2xl"
+                        onClick={(event) => event.stopPropagation()}
                     >
                         <button
-                            className="absolute top-4 right-4 text-3xl text-gray-800 hover:text-black focus:outline-none"
-                            onClick={closeModal}
+                            className="absolute left-4 top-4 z-10 rounded-full bg-white/90 text-4xl text-[#151312] shadow transition hover:text-[#7c3aed]"
+                            onClick={() => setSelectedItem(null)}
+                            aria-label={t.gallery.close}
+                            type="button"
                         >
                             <IoIosCloseCircle />
                         </button>
-                        <div className="w-full">
-                            <img
-                                src={selectedItem.image}
-                                alt={selectedItem.name[currentLanguage]}
-                                className="w-full h-auto object-contain"
-                            />
-                        </div>
-                        <div className="p-6 text-center bg-white">
-                            <h2 className="text-3xl font-bold text-gray-800">
-                                {selectedItem.name[currentLanguage]}
-                            </h2>
-                            <p className="text-gray-600 mt-4 text-lg">
-                                {selectedItem.description[currentLanguage]}
-                            </p>
+                        <img
+                            src={localizedSelectedItem.image}
+                            alt={localizedSelectedItem.name}
+                            className="max-h-[70vh] w-full object-cover"
+                        />
+                        <div className="p-6 text-start md:p-8">
+                            <span className="text-sm font-black text-[#7c3aed]">{localizedSelectedItem.category}</span>
+                            <h2 className="mt-3 text-3xl font-black text-[#151312]">{localizedSelectedItem.name}</h2>
+                            <p className="mt-4 text-lg leading-8 text-stone-600">{localizedSelectedItem.description}</p>
                         </div>
                     </div>
                 </div>
             )}
-        </>
+
+            <Footer />
+        </div>
     );
 };
 
